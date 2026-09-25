@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: railvoya-app
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=sqlite+aiosqlite:///./railvoya.db
+      - SECRET_KEY=production-secret-key-replace-with-random-bytes
+      - CORS_ORIGINS=http://localhost:8000,http://localhost:5173
+      - BRAND_NAME=RailVoya
+      - INTENDED_DOMAIN=railvoya.co.in
+      - RAILWAY_PROVIDER_MODE=demo
+      - PAYMENT_PROVIDER_MODE=demo
+    volumes:
+      - railvoya_data:/app/backend/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/system/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  railvoya_data:

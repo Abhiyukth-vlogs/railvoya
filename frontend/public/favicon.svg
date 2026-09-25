@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="16" fill="#102A43"/>
+  <!-- Train Front / Window Silhouette -->
+  <path d="M18 16C18 12.6863 20.6863 10 24 10H40C43.3137 10 46 12.6863 46 16V34C46 38.4183 42.4183 42 38 42H26C21.5817 42 18 38.4183 18 34V16Z" fill="#1A3654" stroke="#DCE3ED" stroke-width="2"/>
+  <!-- Upper Panoramic Window -->
+  <rect x="22" y="16" width="20" height="12" rx="4" fill="#E7F0F9"/>
+  <!-- Headlights -->
+  <circle cx="24" cy="34" r="3" fill="#F97316"/>
+  <circle cx="40" cy="34" r="3" fill="#F97316"/>
+  <!-- Express Cowcatcher / Track Line -->
+  <path d="M12 54L22 46H42L52 54" stroke="#F97316" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Center Rail Line -->
+  <line x1="32" y1="46" x2="32" y2="56" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
