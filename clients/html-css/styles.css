@@ -1,0 +1,274 @@
+/* Modern Vanilla CSS Design System for RailVoya Widget */
+:root {
+  --navy-primary: #0F172A;
+  --navy-dark: #020617;
+  --action-orange: #FF6600;
+  --action-hover: #E65C00;
+  --border-color: #E2E8F0;
+  --bg-color: #F8FAFC;
+  --text-main: #1E293B;
+  --text-secondary: #64748B;
+  --success: #10B981;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.rail-container {
+  width: 100%;
+  max-width: 680px;
+}
+
+.rail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--navy-primary);
+}
+
+.logo .accent {
+  color: var(--action-orange);
+}
+
+.badge {
+  background: #E2E8F0;
+  color: var(--navy-primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.widget-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  border: 1px solid var(--border-color);
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: #FFF7ED;
+  color: var(--action-orange);
+}
+
+.form-section {
+  display: none;
+}
+
+.form-section.active {
+  display: block;
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 540px) {
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.form-group input, .form-group select {
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy-primary);
+  background: #F8FAFC;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus, .form-group select:focus {
+  border-color: var(--action-orange);
+  background: #FFFFFF;
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--action-orange);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.25);
+}
+
+.primary-btn:hover {
+  background: var(--action-hover);
+}
+
+.results-box {
+  margin-top: 24px;
+  padding: 18px;
+  background: #F8FAFC;
+  border-radius: 16px;
+  border: 1px dashed var(--border-color);
+  min-height: 100px;
+  font-size: 13px;
+}
+
+.placeholder-text {
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 24px 0;
+}
+
+.loading {
+  color: var(--action-orange);
+  font-weight: 700;
+  text-align: center;
+}
+
+.error {
+  color: #DC2626;
+  font-weight: 600;
+}
+
+.trains-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.train-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.train-info strong {
+  display: block;
+  font-size: 14px;
+  color: var(--navy-primary);
+}
+
+.train-info span {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.train-fare {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.price {
+  font-weight: 800;
+  color: var(--navy-primary);
+}
+
+.irctc-link {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1D4ED8;
+  background: #EFF6FF;
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.pnr-card h3 {
+  color: var(--navy-primary);
+  margin-bottom: 6px;
+}
+
+.passengers {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pax-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 8px 12px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.status-cnf {
+  color: var(--success);
+  font-weight: 800;
+}

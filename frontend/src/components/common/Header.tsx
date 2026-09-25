@@ -15,6 +15,7 @@ import {
   ChevronDown,
   Info,
   TrendingUp,
+  Code2,
 } from "lucide-react";
 
 export const Header: React.FC = () => {
@@ -36,6 +37,7 @@ export const Header: React.FC = () => {
     { name: "Trains", path: "/", icon: Train },
     { name: "PNR Status", path: "/pnr", icon: FileSearch },
     { name: "Train Status", path: "/train-status", icon: Activity },
+    { name: "Developers & SDKs", path: "/developers", icon: Code2 },
     { name: "How OTAs Earn", path: "/business-model", icon: TrendingUp },
     { name: "My Trips", path: "/trips", icon: Luggage },
     { name: "Help", path: "/help", icon: HelpCircle },
@@ -56,6 +58,9 @@ export const Header: React.FC = () => {
             <span className="sm:hidden">Demo environment. No real tickets.</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
+            <Link to="/developers" className="text-blue-300 font-bold hover:text-white transition-colors flex items-center gap-1">
+              ⚡ SDKs (HTML, JS, Java, C++)
+            </Link>
             <Link to="/business-model" className="text-amber-300 font-bold hover:text-white transition-colors flex items-center gap-1">
               💰 How OTAs Earn Money
             </Link>

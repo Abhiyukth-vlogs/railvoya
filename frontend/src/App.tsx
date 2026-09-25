@@ -22,6 +22,7 @@ import { HelpPage } from "./pages/HelpPage";
 import { PrivacyPage } from "./pages/PrivacyPage";
 import { TermsPage } from "./pages/TermsPage";
 import { BusinessMonetizationPage } from "./pages/BusinessMonetizationPage";
+import { DeveloperApiPage } from "./pages/DeveloperApiPage";
 
 function App() {
   return (
@@ -41,6 +42,8 @@ function App() {
                 <Route path="/train-status" element={<TrainStatusPage />} />
                 <Route path="/running-status" element={<TrainStatusPage />} />
                 <Route path="/business-model" element={<BusinessMonetizationPage />} />
+                <Route path="/developers" element={<DeveloperApiPage />} />
+                <Route path="/api-docs" element={<DeveloperApiPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/account" element={<AccountPage />} />

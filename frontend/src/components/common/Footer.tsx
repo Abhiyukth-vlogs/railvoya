@@ -55,6 +55,11 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/developers" className="text-blue-300 font-semibold hover:text-white transition-colors">
+                  ⚡ Developers & SDKs (HTML, JS, Java, C++)
+                </Link>
+              </li>
+              <li>
                 <Link to="/about" className="hover:text-white transition-colors">About RailVoya</Link>
               </li>
               <li>
