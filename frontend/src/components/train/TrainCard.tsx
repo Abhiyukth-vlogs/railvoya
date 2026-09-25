@@ -22,6 +22,7 @@ import {
   Satellite,
 } from "lucide-react";
 import { LiveTrainRadarTracker } from "../running/LiveTrainRadarTracker";
+import { RealIrctcModal } from "../booking/RealIrctcModal";
 
 interface TrainCardProps {
   train: TrainSearchResult;
@@ -36,6 +37,7 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
   );
   const [showSchedule, setShowSchedule] = useState(false);
   const [showRadar, setShowRadar] = useState(false);
+  const [showRealIrctcModal, setShowRealIrctcModal] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshText, setRefreshText] = useState("Updated just now");
   const [showFareBreakdown, setShowFareBreakdown] = useState(false);
@@ -284,16 +286,15 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
               </div>
             )}
             {/* Official IRCTC Fast Handoff & Book Action Button */}
-            <a
-              href="https://www.irctc.co.in/eticket/train-search"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-4 py-3.5 rounded-xl border border-blue-300 bg-blue-50/90 hover:bg-blue-100 text-blue-900 font-bold text-xs transition-all flex items-center justify-center gap-1.5 min-h-[44px] shadow-sm"
-              title="Open Official IRCTC Portal with this train"
+            <button
+              type="button"
+              onClick={() => setShowRealIrctcModal(true)}
+              className="w-full sm:w-auto px-4 py-3.5 rounded-xl border border-blue-400 bg-blue-50/90 hover:bg-blue-100 text-blue-900 font-bold text-xs transition-all flex items-center justify-center gap-1.5 min-h-[44px] shadow-sm"
+              title="Buy real ticket on official IRCTC portal"
             >
-              <span>⚡ Official IRCTC</span>
+              <span>⚡ Buy Real Ticket (IRCTC)</span>
               <ExternalLink className="w-3.5 h-3.5 text-blue-600" />
-            </a>
+            </button>
 
             <button
               type="button"
@@ -374,6 +375,17 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
             />
           </div>
         </div>
+      )}
+
+      {/* Real IRCTC Official Fast Handoff Modal */}
+      {showRealIrctcModal && (
+        <RealIrctcModal
+          train={train}
+          selectedClass={selectedClass}
+          journeyDate={journeyDate}
+          quota={quota}
+          onClose={() => setShowRealIrctcModal(false)}
+        />
       )}
 
     </>

@@ -270,13 +270,31 @@ export const HomePage: React.FC = () => {
             </p>
           </details>
 
+          <details className="group bg-white rounded-2xl border border-border-main p-5 open:shadow-sm" open>
+            <summary className="font-bold text-sm text-navy-primary cursor-pointer flex items-center justify-between list-none">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-action-orange"></span>
+                <span>How do I buy a REAL, travel-ready ticket on this website?</span>
+              </span>
+              <ChevronRight className="w-4 h-4 text-slate-400 group-open:rotate-90 transition-transform" />
+            </summary>
+            <div className="mt-3 text-xs text-text-secondary leading-relaxed border-t border-border-subtle pt-3 space-y-2">
+              <p>
+                <b>1. Instant Official IRCTC Booking (Ready Right Now):</b> When you search for any train on RailVoya, click the blue <b>⚡ Buy Real Ticket (IRCTC)</b> button on the train card. This copies your route and transfers you directly to the official Indian Railways portal (<code>irctc.co.in</code>), where you log in, pay IRCTC directly via UPI or card, and receive a genuine, legal 10-digit PNR e-Ticket via SMS!
+              </p>
+              <p>
+                <b>2. In-App Direct Booking (Enterprise Mode):</b> In production, businesses connect their authorized <b>IRCTC B2B Web Service Partner / PSP API keys</b> into RailVoya's backend. The platform then submits bookings directly to CRIS servers without the user ever leaving RailVoya.
+              </p>
+            </div>
+          </details>
+
           <details className="group bg-white rounded-2xl border border-border-main p-5 open:shadow-sm">
             <summary className="font-bold text-sm text-navy-primary cursor-pointer flex items-center justify-between list-none">
-              <span>Are tickets booked on RailVoya valid for real train travel?</span>
+              <span>What is the difference between Demo Mode and Real IRCTC Booking?</span>
               <ChevronRight className="w-4 h-4 text-slate-400 group-open:rotate-90 transition-transform" />
             </summary>
             <p className="mt-3 text-xs text-text-secondary leading-relaxed border-t border-border-subtle pt-3">
-              No. RailVoya is currently running in <b>Honest Demo Mode</b>. All bookings, PNRs, and PDF tickets generated are simulated for software demonstration and user experience testing. No real railway reservations are created and no real bank charges are made.
+              The internal "Book Journey" flow is a local simulation showing full PDF tickets and checkout UI without charging bank accounts. For actual train travel, use the <b>⚡ Buy Real Ticket (IRCTC)</b> button to complete payment directly on official Indian Railways servers.
             </p>
           </details>
 
