@@ -13,48 +13,12 @@ from app.schemas.availability import AvailabilityResponse, FareBreakdown
 from app.schemas.pnr import PnrStatusResponse, PnrPassengerStatus
 from app.schemas.running import RunningStatusResponse, StationRunningStop
 
-STATIONS_DATA: List[Dict] = [
-    {"code": "NDLS", "name": "New Delhi", "city": "New Delhi", "state": "Delhi", "hindi_name": "नई दिल्ली", "is_major_junction": True},
-    {"code": "NZM", "name": "Hazrat Nizamuddin", "city": "New Delhi", "state": "Delhi", "hindi_name": "हज़रत निज़ामुद्दीन", "is_major_junction": True},
-    {"code": "ANVT", "name": "Anand Vihar Terminal", "city": "New Delhi", "state": "Delhi", "hindi_name": "आनंद विहार टर्मिनल", "is_major_junction": True},
-    {"code": "DLI", "name": "Old Delhi Junction", "city": "Delhi", "state": "Delhi", "hindi_name": "पुरानी दिल्ली", "is_major_junction": True},
-    {"code": "MMCT", "name": "Mumbai Central", "city": "Mumbai", "state": "Maharashtra", "hindi_name": "मुंबई सेंट्रल", "is_major_junction": True},
-    {"code": "CSMT", "name": "Chhatrapati Shivaji Maharaj Terminus", "city": "Mumbai", "state": "Maharashtra", "hindi_name": "छ.शि.म.ट.", "is_major_junction": True},
-    {"code": "BDTS", "name": "Bandra Terminus", "city": "Mumbai", "state": "Maharashtra", "hindi_name": "बांद्रा टर्मिनस", "is_major_junction": True},
-    {"code": "LTT", "name": "Lokmanya Tilak Terminus", "city": "Mumbai", "state": "Maharashtra", "hindi_name": "लोकमान्य तिलक टर्मिनस", "is_major_junction": True},
-    {"code": "HWH", "name": "Howrah Junction", "city": "Kolkata", "state": "West Bengal", "hindi_name": "हावड़ा जंक्शन", "is_major_junction": True},
-    {"code": "SDAH", "name": "Sealdah", "city": "Kolkata", "state": "West Bengal", "hindi_name": "सियालदह", "is_major_junction": True},
-    {"code": "SBC", "name": "KSR Bengaluru City", "city": "Bengaluru", "state": "Karnataka", "hindi_name": "के.एस.आर. बेंगलुरु", "is_major_junction": True},
-    {"code": "YPR", "name": "Yesvantpur Junction", "city": "Bengaluru", "state": "Karnataka", "hindi_name": "यशवंतपुर जंक्शन", "is_major_junction": True},
-    {"code": "MAS", "name": "MGR Chennai Central", "city": "Chennai", "state": "Tamil Nadu", "hindi_name": "एम.जी.आर. चेन्नई सेंट्रल", "is_major_junction": True},
-    {"code": "MS", "name": "Chennai Egmore", "city": "Chennai", "state": "Tamil Nadu", "hindi_name": "चेन्नई एग्मोर", "is_major_junction": True},
-    {"code": "ADI", "name": "Ahmedabad Junction", "city": "Ahmedabad", "state": "Gujarat", "hindi_name": "अहमदाबाद जंक्शन", "is_major_junction": True},
-    {"code": "PUNE", "name": "Pune Junction", "city": "Pune", "state": "Maharashtra", "hindi_name": "पुणे जंक्शन", "is_major_junction": True},
-    {"code": "HYB", "name": "Hyderabad Deccan", "city": "Hyderabad", "state": "Telangana", "hindi_name": "हैदराबाद डेक्कन", "is_major_junction": True},
-    {"code": "SC", "name": "Secunderabad Junction", "city": "Secunderabad", "state": "Telangana", "hindi_name": "सिकंदराबाद जंक्शन", "is_major_junction": True},
-    {"code": "BSB", "name": "Varanasi Junction", "city": "Varanasi", "state": "Uttar Pradesh", "hindi_name": "वाराणसी जंक्शन", "is_major_junction": True},
-    {"code": "CNB", "name": "Kanpur Central", "city": "Kanpur", "state": "Uttar Pradesh", "hindi_name": "कानपुर सेंट्रल", "is_major_junction": True},
-    {"code": "LKO", "name": "Lucknow Charbagh", "city": "Lucknow", "state": "Uttar Pradesh", "hindi_name": "लखनऊ चारबाग", "is_major_junction": True},
-    {"code": "JP", "name": "Jaipur Junction", "city": "Jaipur", "state": "Rajasthan", "hindi_name": "जयपुर जंक्शन", "is_major_junction": True},
-    {"code": "BPL", "name": "Bhopal Junction", "city": "Bhopal", "state": "Madhya Pradesh", "hindi_name": "भोपाल जंक्शन", "is_major_junction": True},
-    {"code": "RKMP", "name": "Rani Kamlapati", "city": "Bhopal", "state": "Madhya Pradesh", "hindi_name": "रानी कमलापति", "is_major_junction": True},
-    {"code": "PNBE", "name": "Patna Junction", "city": "Patna", "state": "Bihar", "hindi_name": "पटना जंक्शन", "is_major_junction": True},
-    {"code": "CDG", "name": "Chandigarh Junction", "city": "Chandigarh", "state": "Chandigarh", "hindi_name": "चंडीगढ़ जंक्शन", "is_major_junction": True},
-    {"code": "AGC", "name": "Agra Cantt", "city": "Agra", "state": "Uttar Pradesh", "hindi_name": "आगरा कैंट", "is_major_junction": True},
-    {"code": "ST", "name": "Surat", "city": "Surat", "state": "Gujarat", "hindi_name": "सूरत", "is_major_junction": True},
-    {"code": "BRC", "name": "Vadodara Junction", "city": "Vadodara", "state": "Gujarat", "hindi_name": "वडोदरा जंक्शन", "is_major_junction": True},
-    {"code": "KOTA", "name": "Kota Junction", "city": "Kota", "state": "Rajasthan", "hindi_name": "कोटा जंक्शन", "is_major_junction": True},
-    {"code": "GHY", "name": "Guwahati", "city": "Guwahati", "state": "Assam", "hindi_name": "गुवाहाटी", "is_major_junction": True},
-    {"code": "BBS", "name": "Bhubaneswar", "city": "Bhubaneswar", "state": "Odisha", "hindi_name": "भुवनेश्वर", "is_major_junction": True},
-    {"code": "ASR", "name": "Amritsar Junction", "city": "Amritsar", "state": "Punjab", "hindi_name": "अमृतसर जंक्शन", "is_major_junction": True},
-    {"code": "JAT", "name": "Jammu Tawi", "city": "Jammu", "state": "Jammu and Kashmir", "hindi_name": "जम्मू तवी", "is_major_junction": True},
-    {"code": "TVC", "name": "Thiruvananthapuram Central", "city": "Thiruvananthapuram", "state": "Kerala", "hindi_name": "तिरुवनंतपुरम सेंट्रल", "is_major_junction": True},
-    {"code": "ERS", "name": "Ernakulam Junction", "city": "Kochi", "state": "Kerala", "hindi_name": "एरनाकुलम जंक्शन", "is_major_junction": True},
-    {"code": "MYS", "name": "Mysuru Junction", "city": "Mysuru", "state": "Karnataka", "hindi_name": "मैसूरु जंक्शन", "is_major_junction": True},
-    {"code": "GWL", "name": "Gwalior Junction", "city": "Gwalior", "state": "Madhya Pradesh", "hindi_name": "ग्वालियर जंक्शन", "is_major_junction": True},
-    {"code": "VGLJ", "name": "Virangana Lakshmibai Jhansi", "city": "Jhansi", "state": "Uttar Pradesh", "hindi_name": "वीरांगना लक्ष्मीबाई झांसी", "is_major_junction": True},
-    {"code": "DDU", "name": "Pt. Deen Dayal Upadhyaya Junction", "city": "Mughalsarai", "state": "Uttar Pradesh", "hindi_name": "पं. दीन दयाल उपाध्याय जंक्शन", "is_major_junction": True},
-]
+from app.data.stations_india import ALL_INDIA_STATIONS
+
+STATIONS_DATA: List[Dict] = ALL_INDIA_STATIONS
+STATION_MAP: Dict[str, Dict] = {s["code"]: s for s in STATIONS_DATA}
+GENERATED_TRAINS_CACHE: Dict[str, Dict] = {}
+
 
 # Master trains catalog with routes and real intermediate stops
 TRAINS_CATALOG: List[Dict] = [
@@ -445,8 +409,213 @@ class DemoRailwayAdapter(IRailwayProvider):
         return [item[1] for item in matches[:15]]
 
     async def get_popular_stations(self) -> List[StationItem]:
-        popular_codes = ["NDLS", "MMCT", "HWH", "SBC", "MAS", "ADI", "PUNE", "BSB", "CNB", "JP"]
+        popular_codes = ["NDLS", "MMCT", "HWH", "SBC", "MAS", "ADI", "PUNE", "BSB", "CNB", "JP", "GHY", "TVC", "BPL", "HYB"]
         results = [StationItem(**s) for s in STATIONS_DATA if s["code"] in popular_codes]
+        return results
+
+    def _generate_dynamic_trains(
+        self,
+        orig_code: str,
+        dest_code: str,
+        journey_date: date,
+        travel_class: Optional[str] = None,
+        quota: str = "GN"
+    ) -> List[TrainSearchResult]:
+        orig_station = STATION_MAP.get(orig_code, {"code": orig_code, "name": orig_code, "city": orig_code, "state": "India"})
+        dest_station = STATION_MAP.get(dest_code, {"code": dest_code, "name": dest_code, "city": dest_code, "state": "India"})
+
+        # Deterministic seed based on station pair
+        pair_str = f"{min(orig_code, dest_code)}:{max(orig_code, dest_code)}"
+        pair_hash = int(hashlib.md5(pair_str.encode()).hexdigest()[:8], 16)
+
+        # Distance approximation
+        if orig_station.get("state") == dest_station.get("state") and orig_station.get("state") != "India":
+            base_distance = 180 + (pair_hash % 380)
+        else:
+            base_distance = 450 + (pair_hash % 1600)
+
+        # Pick intermediate junction stops from STATIONS_DATA
+        potential_stops = [
+            s for s in STATIONS_DATA
+            if s["code"] not in [orig_code, dest_code] and s.get("is_major_junction")
+        ]
+        int_stops = []
+        if potential_stops:
+            idx1 = pair_hash % len(potential_stops)
+            idx2 = (pair_hash // 7) % len(potential_stops)
+            if idx1 == idx2:
+                idx2 = (idx2 + 1) % len(potential_stops)
+            int_stops = [potential_stops[idx1], potential_stops[idx2]]
+
+        is_long_dist = base_distance >= 750
+        templates = [
+            {
+                "num_offset": 201,
+                "type": "Vande Bharat" if not is_long_dist else "Rajdhani",
+                "name_suffix": "Vande Bharat Express" if not is_long_dist else "Tejas Rajdhani Express",
+                "classes": ["CC", "EC"] if not is_long_dist else ["1A", "2A", "3A"],
+                "dep_hour": 6,
+                "dep_min": 0,
+                "speed_kmh": 82,
+            },
+            {
+                "num_offset": 305,
+                "type": "Superfast",
+                "name_suffix": "Superfast Express",
+                "classes": ["1A", "2A", "3A", "SL"],
+                "dep_hour": 11,
+                "dep_min": 30,
+                "speed_kmh": 66,
+            },
+            {
+                "num_offset": 451,
+                "type": "Express",
+                "name_suffix": "Mail Express",
+                "classes": ["2A", "3A", "SL", "2S"],
+                "dep_hour": 16,
+                "dep_min": 45,
+                "speed_kmh": 54,
+            },
+            {
+                "num_offset": 617,
+                "type": "Garib Rath" if not is_long_dist else "Humsafar",
+                "name_suffix": "Garib Rath Express" if not is_long_dist else "Humsafar Express",
+                "classes": ["3A", "3E"],
+                "dep_hour": 21,
+                "dep_min": 15,
+                "speed_kmh": 68,
+            },
+        ]
+
+        results = []
+        for t_idx, t_spec in enumerate(templates):
+            t_base = 22000 if t_spec["type"] in ["Vande Bharat", "Superfast"] else (12000 if t_spec["type"] == "Rajdhani" else 15000)
+            train_num = str(t_base + ((pair_hash + t_spec["num_offset"] + t_idx * 11) % 999))
+            train_name = f"{orig_station['city']} - {dest_station['city']} {t_spec['name_suffix']}"
+
+            travel_hours = max(2.5, base_distance / t_spec["speed_kmh"])
+            tot_mins = int(travel_hours * 60)
+
+            dep_h = t_spec["dep_hour"]
+            dep_m = t_spec["dep_min"]
+            dep_time_str = f"{dep_h:02d}:{dep_m:02d}"
+
+            arr_total_mins = (dep_h * 60 + dep_m) + tot_mins
+            day_offset = arr_total_mins // (24 * 60)
+            arr_rem_mins = arr_total_mins % (24 * 60)
+            arr_time_str = f"{arr_rem_mins // 60:02d}:{arr_rem_mins % 60:02d}"
+
+            dur_str = f"{tot_mins // 60}h {tot_mins % 60:02d}m"
+
+            stops = [
+                {
+                    "station_code": orig_code,
+                    "station_name": orig_station["name"],
+                    "arrival_time": "First",
+                    "departure_time": dep_time_str,
+                    "halt_minutes": 0,
+                    "day_count": 1,
+                    "distance_km": 0,
+                    "platform": str((pair_hash % 4) + 1),
+                }
+            ]
+
+            if int_stops:
+                stop1 = int_stops[0]
+                d1 = int(base_distance * 0.35)
+                mins1 = int((d1 / t_spec["speed_kmh"]) * 60)
+                t1_arr = (dep_h * 60 + dep_m) + mins1
+                stops.append({
+                    "station_code": stop1["code"],
+                    "station_name": stop1["name"],
+                    "arrival_time": f"{(t1_arr % 1440) // 60:02d}:{(t1_arr % 1440) % 60:02d}",
+                    "departure_time": f"{((t1_arr + 5) % 1440) // 60:02d}:{((t1_arr + 5) % 1440) % 60:02d}",
+                    "halt_minutes": 5,
+                    "day_count": 1 + (t1_arr // 1440),
+                    "distance_km": d1,
+                    "platform": str(((pair_hash + 1) % 4) + 1),
+                })
+
+                if len(int_stops) > 1 and base_distance >= 400:
+                    stop2 = int_stops[1]
+                    d2 = int(base_distance * 0.70)
+                    mins2 = int((d2 / t_spec["speed_kmh"]) * 60)
+                    t2_arr = (dep_h * 60 + dep_m) + mins2
+                    stops.append({
+                        "station_code": stop2["code"],
+                        "station_name": stop2["name"],
+                        "arrival_time": f"{(t2_arr % 1440) // 60:02d}:{(t2_arr % 1440) % 60:02d}",
+                        "departure_time": f"{((t2_arr + 5) % 1440) // 60:02d}:{((t2_arr + 5) % 1440) % 60:02d}",
+                        "halt_minutes": 5,
+                        "day_count": 1 + (t2_arr // 1440),
+                        "distance_km": d2,
+                        "platform": str(((pair_hash + 2) % 4) + 1),
+                    })
+
+            stops.append({
+                "station_code": dest_code,
+                "station_name": dest_station["name"],
+                "arrival_time": arr_time_str,
+                "departure_time": "Last",
+                "halt_minutes": 0,
+                "day_count": 1 + day_offset,
+                "distance_km": base_distance,
+                "platform": str(((pair_hash + 3) % 4) + 1),
+            })
+
+            train_dict = {
+                "train_number": train_num,
+                "train_name": train_name,
+                "train_type": t_spec["type"],
+                "origin_code": orig_code,
+                "origin_name": orig_station["name"],
+                "destination_code": dest_code,
+                "destination_name": dest_station["name"],
+                "departure_time": dep_time_str,
+                "arrival_time": arr_time_str,
+                "duration": dur_str,
+                "arrival_day_offset": day_offset,
+                "running_days": ["M", "T", "W", "T", "F", "S", "S"],
+                "classes": t_spec["classes"],
+                "distance_km": base_distance,
+                "stops": stops,
+            }
+            GENERATED_TRAINS_CACHE[train_num] = train_dict
+
+            classes_avail = []
+            for c_code in t_spec["classes"]:
+                if travel_class and travel_class != "ALL" and travel_class != c_code:
+                    continue
+                avail_info = self._calculate_availability(
+                    train_num,
+                    orig_code,
+                    dest_code,
+                    journey_date,
+                    c_code,
+                    quota,
+                    base_distance,
+                )
+                classes_avail.append(avail_info)
+
+            if classes_avail:
+                results.append(
+                    TrainSearchResult(
+                        train_number=train_num,
+                        train_name=train_name,
+                        train_type=t_spec["type"],
+                        origin_code=orig_code,
+                        origin_name=orig_station["name"],
+                        destination_code=dest_code,
+                        destination_name=dest_station["name"],
+                        departure_time=dep_time_str,
+                        arrival_time=arr_time_str,
+                        duration=dur_str,
+                        arrival_day_offset=day_offset,
+                        running_days=["M", "T", "W", "T", "F", "S", "S"],
+                        classes=classes_avail,
+                    )
+                )
+
         return results
 
     async def search_trains(
@@ -459,35 +628,27 @@ class DemoRailwayAdapter(IRailwayProvider):
     ) -> List[TrainSearchResult]:
         orig = origin.strip().upper()
         dest = destination.strip().upper()
-        
-        # Identify weekday abbreviation (e.g. "M", "T", "W", "T", "F", "S", "S")
-        weekday_map = ["M", "T", "W", "T", "F", "S", "S"]
-        day_char = weekday_map[journey_date.weekday()]
 
         matching_trains = []
 
         for train in TRAINS_CATALOG:
-            # Check if both stations exist in the train's route
             stop_codes = [stop["station_code"] for stop in train["stops"]]
             if orig in stop_codes and dest in stop_codes:
                 orig_idx = stop_codes.index(orig)
                 dest_idx = stop_codes.index(dest)
-                
-                # Must travel in forward direction
+
                 if orig_idx < dest_idx:
                     orig_stop = train["stops"][orig_idx]
                     dest_stop = train["stops"][dest_idx]
-                    
-                    # Calculate segment distance and duration
+
                     dist_km = dest_stop["distance_km"] - orig_stop["distance_km"]
                     day_offset = dest_stop["day_count"] - orig_stop["day_count"]
-                    
-                    # Compute availability for each class on this journey date & quota
+
                     classes_avail = []
                     for c_code in train["classes"]:
                         if travel_class and travel_class != "ALL" and travel_class != c_code:
                             continue
-                        
+
                         avail_info = self._calculate_availability(
                             train["train_number"],
                             orig,
@@ -518,20 +679,31 @@ class DemoRailwayAdapter(IRailwayProvider):
                             )
                         )
 
+        # If catalog has fewer than 2 trains for this pair, supplement dynamically
+        if len(matching_trains) < 2:
+            dynamic_trains = self._generate_dynamic_trains(orig, dest, journey_date, travel_class, quota)
+            existing_nums = {t.train_number for t in matching_trains}
+            for dt in dynamic_trains:
+                if dt.train_number not in existing_nums:
+                    matching_trains.append(dt)
+
         return matching_trains
 
     async def get_train_schedule(self, train_number: str) -> Optional[TrainScheduleResponse]:
-        for train in TRAINS_CATALOG:
-            if train["train_number"] == train_number:
-                return TrainScheduleResponse(
-                    train_number=train["train_number"],
-                    train_name=train["train_name"],
-                    train_type=train["train_type"],
-                    running_days=train["running_days"],
-                    total_distance_km=train["distance_km"],
-                    total_duration=train["duration"],
-                    stops=[ScheduleStop(**s) for s in train["stops"]]
-                )
+        train = next((t for t in TRAINS_CATALOG if t["train_number"] == train_number), None)
+        if not train:
+            train = GENERATED_TRAINS_CACHE.get(train_number)
+
+        if train:
+            return TrainScheduleResponse(
+                train_number=train["train_number"],
+                train_name=train["train_name"],
+                train_type=train["train_type"],
+                running_days=train["running_days"],
+                total_distance_km=train["distance_km"],
+                total_duration=train["duration"],
+                stops=[ScheduleStop(**s) for s in train["stops"]]
+            )
         return None
 
     async def check_availability(
@@ -546,7 +718,16 @@ class DemoRailwayAdapter(IRailwayProvider):
     ) -> AvailabilityResponse:
         train = next((t for t in TRAINS_CATALOG if t["train_number"] == train_number), None)
         if not train:
-            raise ValueError(f"Train {train_number} not found.")
+            train = GENERATED_TRAINS_CACHE.get(train_number)
+
+        if not train:
+            # Generate dynamically on demand
+            self._generate_dynamic_trains(origin, destination, journey_date, travel_class, quota)
+            train = GENERATED_TRAINS_CACHE.get(train_number)
+
+        if not train:
+            train = TRAINS_CATALOG[0]
+
 
         # Find stops
         stop_codes = [s["station_code"] for s in train["stops"]]
@@ -642,6 +823,8 @@ class DemoRailwayAdapter(IRailwayProvider):
 
     async def get_running_status(self, train_number: str, journey_date: date) -> RunningStatusResponse:
         train = next((t for t in TRAINS_CATALOG if t["train_number"] == train_number), None)
+        if not train:
+            train = GENERATED_TRAINS_CACHE.get(train_number)
         if not train:
             # Fallback to first train if arbitrary train searched
             train = TRAINS_CATALOG[0]

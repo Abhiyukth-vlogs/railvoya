@@ -57,6 +57,7 @@ export const BookingPage: React.FC = () => {
   const [autoUpgradation, setAutoUpgradation] = useState(true);
   const [bookingCondition, setBookingCondition] = useState("NONE");
   const [travelInsurance, setTravelInsurance] = useState(true);
+  const [ixigoAssured, setIxigoAssured] = useState(true);
 
   // GST Details for Business
   const [gstEnabled, setGstEnabled] = useState(false);
@@ -599,6 +600,57 @@ export const BookingPage: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* ixigo Assured Trip Guarantee */}
+                  <div className={`p-4 rounded-2xl border transition-all ${
+                    ixigoAssured
+                      ? "bg-gradient-to-r from-emerald-50/90 to-teal-50/90 border-emerald-300 ring-2 ring-emerald-500/20"
+                      : "bg-slate-50 border-slate-200"
+                  }`}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                          <ShieldCheck className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-xs font-black text-navy-primary tracking-wide uppercase">
+                              ixigo Assured Guarantee
+                            </span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                              ₹0 Cancellation Fee
+                            </span>
+                          </div>
+                          <p className="text-xs text-emerald-950 font-bold mt-0.5">
+                            Get 100% Instant Full Refund on Cancellation
+                          </p>
+                          <p className="text-[11px] text-text-secondary mt-1">
+                            No questions asked • Instant refund directly to source • Tatkal charges refunded too.
+                          </p>
+                        </div>
+                      </div>
+
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+                        <input
+                          type="checkbox"
+                          checked={ixigoAssured}
+                          onChange={(e) => setIxigoAssured(e.target.checked)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                      </label>
+                    </div>
+
+                    {ixigoAssured && (
+                      <div className="mt-3 pt-3 border-t border-emerald-200/80 flex items-center justify-between text-xs text-emerald-900 font-semibold">
+                        <span>Protection Fee: ₹{passengers.length * 99} (₹99 × {passengers.length} travelers)</span>
+                        <span className="text-emerald-700 font-extrabold flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5" /> 100% Refund Active
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+
                   {/* GST Details (Optional) */}
                   <div className="pt-2">
                     <button
@@ -987,7 +1039,7 @@ export const BookingPage: React.FC = () => {
                       <span>Processing Demo Booking...</span>
                     ) : (
                       <>
-                        <span>Complete Demo Booking (₹{quote?.fare_breakdown.total_amount || 0})</span>
+                        <span>Complete Demo Booking (₹{((quote?.fare_breakdown.total_amount || 0) + (travelInsurance ? passengers.length * 0.45 : 0) + (ixigoAssured ? passengers.length * 99 : 0)).toFixed(2)})</span>
                         <CheckCircle2 className="w-5 h-5" />
                       </>
                     )}
@@ -1010,7 +1062,7 @@ export const BookingPage: React.FC = () => {
               <div className="space-y-3 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-text-secondary">Boarding Station</span>
-                  <span className="font-bold text-navy-primary">{origin}</span>
+                  <span className="font-bold text-navy-primary">{boardingStation || origin}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-text-secondary">Destination Station</span>
@@ -1030,7 +1082,7 @@ export const BookingPage: React.FC = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-text-secondary">Total Passengers</span>
-                  <span className="font-bold text-navy-primary">{passengers.length} Adult(s)</span>
+                  <span className="font-bold text-navy-primary">{passengers.length} Traveler(s)</span>
                 </div>
               </div>
 
@@ -1064,11 +1116,27 @@ export const BookingPage: React.FC = () => {
                         <span>₹{quote.fare_breakdown.gst_amount.toFixed(2)}</span>
                       </div>
                     )}
+                    {travelInsurance && (
+                      <div className="flex items-center justify-between text-emerald-800 font-medium">
+                        <span>Travel Insurance (₹0.45/pax)</span>
+                        <span>₹{(passengers.length * 0.45).toFixed(2)}</span>
+                      </div>
+                    )}
+                    {ixigoAssured && (
+                      <div className="flex items-center justify-between text-emerald-800 font-bold">
+                        <span>ixigo Assured (100% Refund)</span>
+                        <span>₹{(passengers.length * 99).toFixed(2)}</span>
+                      </div>
+                    )}
 
                     <div className="pt-3 border-t border-border-subtle flex items-baseline justify-between">
-                      <span className="font-extrabold text-sm text-navy-primary">Total Fare (INR)</span>
+                      <span className="font-extrabold text-sm text-navy-primary">Total Payable (INR)</span>
                       <span className="text-2xl font-black text-navy-primary">
-                        ₹{quote.fare_breakdown.total_amount.toLocaleString("en-IN")}
+                        ₹{(
+                          quote.fare_breakdown.total_amount +
+                          (travelInsurance ? passengers.length * 0.45 : 0) +
+                          (ixigoAssured ? passengers.length * 99 : 0)
+                        ).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   </>

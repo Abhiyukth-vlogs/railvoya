@@ -226,9 +226,9 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
                   </div>
 
                   {(isRac || isWl) && (
-                    <div className="mt-1 text-[10px] font-semibold text-emerald-700 flex items-center gap-1">
-                      <Sparkles className="w-2.5 h-2.5 text-emerald-600" />
-                      <span>{isRac ? "92% Chance" : "78% Chance"}</span>
+                    <div className="mt-1 text-[10px] font-bold text-emerald-800 bg-emerald-100/90 px-1.5 py-0.5 rounded border border-emerald-300 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                      <span>ixigo AI: {isRac ? "94% High" : "76% Med"} Chance</span>
                     </div>
                   )}
 
@@ -259,7 +259,12 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
                     Fare Breakup
                   </button>
                 </div>
-                <span className="text-lg font-extrabold text-navy-primary">₹{selectedClass.fare.toLocaleString("en-IN")}</span>
+                <div className="flex items-baseline justify-end gap-1">
+                  <span className="text-lg font-extrabold text-navy-primary">₹{selectedClass.fare.toLocaleString("en-IN")}</span>
+                </div>
+                <span className="text-[10px] font-bold text-emerald-700">
+                  🛡️ Eligible for ixigo Assured
+                </span>
               </div>
             )}
             <button
@@ -268,7 +273,7 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
               disabled={!selectedClass}
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-action-orange hover:bg-action-hover text-white font-bold text-sm transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 min-h-[44px]"
             >
-              <span>Book Now</span>
+              <span>Book Journey</span>
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>

@@ -119,6 +119,17 @@ export const ConfirmationPage: React.FC = () => {
               <span>Download E-Ticket (PDF)</span>
             </a>
 
+            <button
+              type="button"
+              onClick={() => {
+                alert(`Ticket details for PNR ${booking.pnr_number} copied!\n\nTrain: ${booking.train_number} ${booking.train_name}\nFrom: ${booking.origin_code} To: ${booking.destination_code}\nDate: ${booking.journey_date}\nStatus: ${booking.status}\nPassengers: ${booking.passengers.map(p => `${p.full_name} (${p.assigned_coach}-${p.assigned_berth})`).join(", ")}`);
+              }}
+              className="px-5 py-3.5 rounded-xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-sm shadow-sm transition-all flex items-center gap-2 min-h-[44px]"
+            >
+              <Share2 className="w-4 h-4 text-emerald-600" />
+              <span>Share on WhatsApp</span>
+            </button>
+
             <Link
               to="/trips"
               className="px-6 py-3.5 rounded-xl border border-border-main hover:bg-slate-50 text-navy-primary font-bold text-sm shadow-sm transition-all flex items-center gap-2 min-h-[44px]"
@@ -127,6 +138,26 @@ export const ConfirmationPage: React.FC = () => {
               <span>Go to My Trips</span>
             </Link>
           </div>
+        </div>
+
+        {/* ixigo Assured Protection Banner */}
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-300 text-xs text-emerald-950 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="font-extrabold text-emerald-950 block text-xs">
+                ixigo Assured Trip Protection Active
+              </span>
+              <span className="text-[11px] text-emerald-800">
+                100% Instant Full Refund Guarantee is active on this booking. ₹0 cancellation fee eligible until chart preparation.
+              </span>
+            </div>
+          </div>
+          <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-200 text-emerald-900 shrink-0">
+            Protected
+          </span>
         </div>
 
         {/* Demo Watermark Notice */}
@@ -138,6 +169,48 @@ export const ConfirmationPage: React.FC = () => {
               This confirmation and the downloadable PDF are simulated travel documents generated on RailVoya for demonstration purposes. It does not constitute a valid railway booking on Indian Railways.
             </p>
           </div>
+        </div>
+
+        {/* Visual Coach & Berth Position (ixigo-style) */}
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-border-main shadow-card space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-xs font-bold text-action-orange uppercase tracking-wider">Coach Layout & Sequence</span>
+              <h3 className="text-lg font-black text-navy-primary mt-0.5">Your Coach Position in Rake</h3>
+            </div>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700">
+              Engine Front ➔
+            </span>
+          </div>
+
+          <div className="overflow-x-auto py-2">
+            <div className="flex items-center gap-2 min-w-[620px] px-1">
+              <div className="px-3 py-2.5 rounded-xl bg-navy-primary text-white font-extrabold text-xs flex flex-col items-center justify-center shrink-0 shadow-sm border border-navy-800">
+                <Train className="w-4 h-4 mb-0.5 text-action-orange" />
+                <span>LOCO</span>
+              </div>
+              <div className="px-2.5 py-2 rounded-lg bg-slate-200 text-slate-700 font-bold text-[11px] shrink-0">EOG</div>
+              <div className="px-2.5 py-2 rounded-lg bg-slate-100 text-slate-600 font-bold text-[11px] shrink-0">GEN</div>
+              <div className="px-2.5 py-2 rounded-lg bg-slate-100 text-slate-600 font-bold text-[11px] shrink-0">S1</div>
+              <div className="px-2.5 py-2 rounded-lg bg-slate-100 text-slate-600 font-bold text-[11px] shrink-0">S2</div>
+
+              {/* User's Coach */}
+              <div className="px-4 py-2.5 rounded-xl bg-action-orange text-white font-black text-xs flex flex-col items-center justify-center shrink-0 shadow-md ring-4 ring-orange-200">
+                <span className="text-[9px] font-bold uppercase tracking-wider text-orange-100">YOUR COACH</span>
+                <span className="text-sm">{booking.passengers[0]?.assigned_coach || "B1"}</span>
+              </div>
+
+              <div className="px-2.5 py-2 rounded-lg bg-slate-100 text-slate-600 font-bold text-[11px] shrink-0">B2</div>
+              <div className="px-2.5 py-2 rounded-lg bg-slate-100 text-slate-600 font-bold text-[11px] shrink-0">B3</div>
+              <div className="px-2.5 py-2 rounded-lg bg-slate-100 text-slate-600 font-bold text-[11px] shrink-0">A1</div>
+              <div className="px-2.5 py-2 rounded-lg bg-slate-100 text-slate-600 font-bold text-[11px] shrink-0">H1</div>
+              <div className="px-2.5 py-2 rounded-lg bg-slate-200 text-slate-700 font-bold text-[11px] shrink-0">SLR</div>
+            </div>
+          </div>
+
+          <p className="text-xs text-text-secondary">
+            Your coach <b>{booking.passengers[0]?.assigned_coach || "B1"}</b> is positioned approximately in the middle of the rake.
+          </p>
         </div>
 
         {/* Journey Details Card */}

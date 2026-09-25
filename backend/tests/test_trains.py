@@ -31,3 +31,18 @@ async def test_train_search_and_schedule(client):
     sched = sched_res.json()
     assert sched["train_number"] == train_no
     assert len(sched["stops"]) >= 2
+
+    # 5. Nationwide dynamic search: PUNE -> MAO (Goa)
+    dyn_res = await client.get(f"/api/v1/trains/search?origin=PUNE&destination=MAO&journey_date={tomorrow}&quota=GN")
+    assert dyn_res.status_code == 200
+    dyn_trains = dyn_res.json()
+    assert len(dyn_trains) >= 2
+    assert dyn_trains[0]["origin_code"] == "PUNE"
+    assert dyn_trains[0]["destination_code"] == "MAO"
+    assert len(dyn_trains[0]["classes"]) > 0
+    # Schedule for dynamic train
+    dyn_train_no = dyn_trains[0]["train_number"]
+    dyn_sched = await client.get(f"/api/v1/trains/{dyn_train_no}/schedule")
+    assert dyn_sched.status_code == 200
+    assert len(dyn_sched.json()["stops"]) >= 2
+

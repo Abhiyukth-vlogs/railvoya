@@ -96,8 +96,51 @@ export const SearchCard: React.FC = () => {
   const isToday = journeyDate === getTodayDate();
   const isTomorrow = journeyDate === getTomorrowDate();
 
+  const [activeTab, setActiveTab] = useState<"trains" | "pnr" | "running">("trains");
+
   return (
-    <div className="w-full bg-white rounded-3xl shadow-elevated border border-border-main p-5 sm:p-6 lg:p-8">
+    <div className="w-full bg-white rounded-3xl shadow-elevated border border-border-main p-5 sm:p-6 lg:p-8 space-y-6">
+      {/* ixigo-style Travel Mode Tabs */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-border-subtle">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl">
+          <button
+            type="button"
+            onClick={() => setActiveTab("trains")}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all bg-navy-primary text-white shadow-sm"
+          >
+            <span>🚆</span>
+            <span>Trains</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/pnr")}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-text-secondary hover:text-navy-primary transition-all hover:bg-slate-200/60"
+          >
+            <span>🎫</span>
+            <span>PNR Status</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/running-status")}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-text-secondary hover:text-navy-primary transition-all hover:bg-slate-200/60"
+          >
+            <span>📍</span>
+            <span>Live Running Status</span>
+          </button>
+        </div>
+
+        {/* ixigo Assured & Tatkal Badges */}
+        <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>🛡️ ixigo Assured: ₹0 Cancellation Fee</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-300">
+            <span>⚡ Tatkal: AC 10 AM | Non-AC 11 AM</span>
+          </span>
+        </div>
+      </div>
+
       <form onSubmit={handleSearch} className="space-y-6">
         {/* Main Station & Date Row */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
