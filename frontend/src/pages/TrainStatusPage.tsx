@@ -11,6 +11,8 @@ import {
   AlertCircle,
   Calendar,
 } from "lucide-react";
+import { LiveTrainRadarTracker } from "../components/running/LiveTrainRadarTracker";
+
 
 export const TrainStatusPage: React.FC = () => {
   const [trainInput, setTrainInput] = useState("12952");
@@ -141,8 +143,18 @@ export const TrainStatusPage: React.FC = () => {
               </div>
             </div>
 
+            {/* Revolutionary Live Satellite Radar & RTIS GPS Tracker */}
+            <LiveTrainRadarTracker
+              trainNumber={runningData.train_number}
+              trainName={runningData.train_name}
+              currentStation={runningData.current_station}
+              delayMinutes={runningData.delay_minutes}
+              stops={runningData.stops}
+            />
+
             {/* Timeline Route Stops */}
             <div className="space-y-4 pt-2">
+
               <h3 className="text-sm font-extrabold text-navy-primary">Live Station Tracking Timeline</h3>
 
               <div className="relative pl-6 sm:pl-8 border-l-2 border-slate-200 ml-4 space-y-6">

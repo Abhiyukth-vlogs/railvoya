@@ -21,6 +21,7 @@ import { ContactPage } from "./pages/ContactPage";
 import { HelpPage } from "./pages/HelpPage";
 import { PrivacyPage } from "./pages/PrivacyPage";
 import { TermsPage } from "./pages/TermsPage";
+import { BusinessMonetizationPage } from "./pages/BusinessMonetizationPage";
 
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
                 <Route path="/trips" element={<MyTripsPage />} />
                 <Route path="/pnr" element={<PnrStatusPage />} />
                 <Route path="/train-status" element={<TrainStatusPage />} />
+                <Route path="/running-status" element={<TrainStatusPage />} />
+                <Route path="/business-model" element={<BusinessMonetizationPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/account" element={<AccountPage />} />
@@ -47,6 +50,7 @@ function App() {
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/terms" element={<TermsPage />} />
               </Routes>
+
             </main>
             <Footer />
           </div>

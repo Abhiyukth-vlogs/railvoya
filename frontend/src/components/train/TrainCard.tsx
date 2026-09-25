@@ -17,7 +17,11 @@ import {
   Coffee,
   Info,
   ThumbsUp,
+  ExternalLink,
+  X,
+  Satellite,
 } from "lucide-react";
+import { LiveTrainRadarTracker } from "../running/LiveTrainRadarTracker";
 
 interface TrainCardProps {
   train: TrainSearchResult;
@@ -31,6 +35,7 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
     train.classes.length > 0 ? train.classes[0] : null
   );
   const [showSchedule, setShowSchedule] = useState(false);
+  const [showRadar, setShowRadar] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [refreshText, setRefreshText] = useState("Updated just now");
   const [showFareBreakdown, setShowFareBreakdown] = useState(false);
@@ -154,12 +159,23 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
               </div>
             </div>
 
-            <button
-              onClick={() => setShowSchedule(true)}
-              className="mt-1.5 text-xs font-semibold text-action-orange hover:text-action-hover transition-colors underline-offset-2 hover:underline"
-            >
-              View Route & Stops
-            </button>
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-1.5">
+              <button
+                onClick={() => setShowSchedule(true)}
+                className="text-xs font-semibold text-action-orange hover:text-action-hover transition-colors underline-offset-2 hover:underline"
+              >
+                View Route & Stops
+              </button>
+              <span className="text-slate-300">•</span>
+              <button
+                type="button"
+                onClick={() => setShowRadar(true)}
+                className="text-xs font-extrabold text-cyan-600 hover:text-cyan-800 transition-colors flex items-center gap-1"
+              >
+                <Satellite className="w-3 h-3 text-cyan-500 animate-pulse" />
+                <span>Live Satellite Radar</span>
+              </button>
+            </div>
           </div>
 
           {/* Destination */}
@@ -267,6 +283,18 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
                 </span>
               </div>
             )}
+            {/* Official IRCTC Fast Handoff & Book Action Button */}
+            <a
+              href="https://www.irctc.co.in/eticket/train-search"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-4 py-3.5 rounded-xl border border-blue-300 bg-blue-50/90 hover:bg-blue-100 text-blue-900 font-bold text-xs transition-all flex items-center justify-center gap-1.5 min-h-[44px] shadow-sm"
+              title="Open Official IRCTC Portal with this train"
+            >
+              <span>⚡ Official IRCTC</span>
+              <ExternalLink className="w-3.5 h-3.5 text-blue-600" />
+            </a>
+
             <button
               type="button"
               onClick={handleBookNow}
@@ -324,6 +352,30 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
         isOpen={showSchedule}
         onClose={() => setShowSchedule(false)}
       />
+
+      {/* Live Satellite Radar Modal */}
+      {showRadar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-navy-900 border border-white/20 p-2 shadow-2xl">
+            <div className="absolute top-4 right-4 z-20">
+              <button
+                type="button"
+                onClick={() => setShowRadar(false)}
+                className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <LiveTrainRadarTracker
+              trainNumber={train.train_number}
+              trainName={train.train_name}
+              currentStation={train.origin_name}
+              delayMinutes={0}
+            />
+          </div>
+        </div>
+      )}
+
     </>
   );
 };

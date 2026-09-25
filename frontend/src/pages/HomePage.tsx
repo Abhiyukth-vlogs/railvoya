@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { SearchCard } from "../components/search/SearchCard";
 import { useSearch, getTomorrowDate } from "../context/SearchContext";
 import { BRAND_CONFIG } from "../config/brand";
+import { VandeBharatHeroAnimation } from "../components/home/VandeBharatHeroAnimation";
 import {
   Sparkles,
   ShieldCheck,
@@ -17,6 +18,8 @@ import {
   HelpCircle,
   Train,
   ArrowRight,
+  Coins,
+  TrendingUp,
 } from "lucide-react";
 
 export const HomePage: React.FC = () => {
@@ -52,7 +55,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Spacious Navy Hero Section */}
-      <section className="relative bg-navy-primary text-white pt-16 pb-36 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative bg-navy-primary text-white pt-16 pb-40 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Subtle decorative train track vectors & glowing gradient backdrop */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600">
@@ -73,15 +76,39 @@ export const HomePage: React.FC = () => {
           </h1>
 
           <p className="text-lg sm:text-xl text-slate-300 font-medium max-w-2xl mx-auto">
-            {BRAND_CONFIG.tagline} Discover routes, compare fares across all quotas, and enjoy clean, clutter-free booking.
+            {BRAND_CONFIG.tagline} Discover routes across 180+ stations, track Vande Bharat telemetry, and book tickets with direct IRCTC connectivity.
           </p>
+
+          {/* Quick Monetization & IRCTC Handoff Ribbon */}
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3 text-xs font-bold">
+            <Link
+              to="/business-model"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition-all shadow-sm"
+            >
+              <Coins className="w-3.5 h-3.5 text-emerald-400" />
+              <span>How Platforms Make Money (Revenue Calculator)</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+
+            <a
+              href="https://www.irctc.co.in/eticket/train-search"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-500/20 text-blue-200 border border-blue-500/30 hover:bg-blue-500/30 transition-all shadow-sm"
+            >
+              <span>Direct Official IRCTC Gateway</span>
+              <ArrowRight className="w-3 h-3 text-blue-300" />
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* Overlapping Search Card */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-20">
+      {/* Vande Bharat Express Interactive Animation & Overlapping Search Card */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-28 relative z-20 space-y-6">
+        <VandeBharatHeroAnimation />
         <SearchCard />
       </section>
+
 
       {/* Recent Searches (If Any) */}
       {recentSearches.length > 0 && (

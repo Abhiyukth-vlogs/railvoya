@@ -25,6 +25,7 @@ import {
   Sparkles,
   Shield,
   RefreshCw,
+  ExternalLink,
 } from "lucide-react";
 import { ScheduleStop } from "../types";
 
@@ -791,11 +792,37 @@ export const BookingPage: React.FC = () => {
                   </p>
                 </div>
 
+                {/* Direct Official IRCTC Portal Payment Option */}
+                <div className="p-4 rounded-2xl bg-blue-50/90 border border-blue-200 text-xs text-blue-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-extrabold text-blue-900 text-sm">Direct Official IRCTC Payment</span>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-200 text-blue-900">
+                        Official Indian Railways Portal
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-blue-800 leading-relaxed">
+                      Prefer paying directly to Indian Railways? You can jump straight to IRCTC's official secure payment gateway for Train #{trainNumber}.
+                    </p>
+                  </div>
+
+                  <a
+                    href="https://www.irctc.co.in/eticket/train-search"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs transition-colors shrink-0 flex items-center justify-center gap-1.5 shadow-sm"
+                  >
+                    <span>Pay on IRCTC.co.in</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+
                 {/* Authentic Indian Payment Methods Selector */}
                 <div className="space-y-4">
                   <label className="block text-xs font-bold uppercase tracking-wider text-text-secondary">
                     Select Payment Method:
                   </label>
+
 
                   {/* Payment Tabs */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">

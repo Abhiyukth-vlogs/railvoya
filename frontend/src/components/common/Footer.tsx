@@ -50,6 +50,11 @@ export const Footer: React.FC = () => {
                 <Link to="/help" className="hover:text-white transition-colors">FAQs & Booking Rules</Link>
               </li>
               <li>
+                <Link to="/business-model" className="text-amber-400 font-semibold hover:text-white transition-colors">
+                  💰 How OTAs Earn (ixigo vs IRCTC)
+                </Link>
+              </li>
+              <li>
                 <Link to="/about" className="hover:text-white transition-colors">About RailVoya</Link>
               </li>
               <li>
