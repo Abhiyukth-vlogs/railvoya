@@ -29,3 +29,7 @@ test = [
 asyncio_mode = "auto"
 pythonpath = ["."]
 testpaths = ["tests"]
+
+[tool.vercel]
+entrypoint = "main:app"
+

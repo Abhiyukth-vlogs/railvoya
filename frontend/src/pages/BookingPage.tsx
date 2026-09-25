@@ -17,7 +17,16 @@ import {
   Clock,
   Train,
   Check,
+  QrCode,
+  Smartphone,
+  Building2,
+  Wallet,
+  Lock,
+  Sparkles,
+  Shield,
+  RefreshCw,
 } from "lucide-react";
+import { ScheduleStop } from "../types";
 
 export const BookingPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -34,6 +43,34 @@ export const BookingPage: React.FC = () => {
 
   // Steps: 1 = Passengers, 2 = Review, 3 = Payment / Demo Completion
   const [step, setStep] = useState<1 | 2 | 3>(1);
+
+  // IRCTC User verification
+  const [irctcUserId, setIrctcUserId] = useState("abhiyukth_travels");
+  const [isIrctcVerified, setIsIrctcVerified] = useState(true);
+  const [verifyingUser, setVerifyingUser] = useState(false);
+
+  // Boarding Station & Schedule Stops
+  const [boardingStation, setBoardingStation] = useState(origin);
+  const [availableStops, setAvailableStops] = useState<ScheduleStop[]>([]);
+
+  // IRCTC Travel Preferences
+  const [autoUpgradation, setAutoUpgradation] = useState(true);
+  const [bookingCondition, setBookingCondition] = useState("NONE");
+  const [travelInsurance, setTravelInsurance] = useState(true);
+
+  // GST Details for Business
+  const [gstEnabled, setGstEnabled] = useState(false);
+  const [gstin, setGstin] = useState("");
+  const [companyName, setCompanyName] = useState("");
+
+  // Payment Gateway simulation state
+  const [paymentMode, setPaymentMode] = useState<"UPI" | "NET_BANKING" | "CARD" | "WALLET">("UPI");
+  const [upiId, setUpiId] = useState("traveler@okhdfcbank");
+  const [selectedBank, setSelectedBank] = useState("SBI");
+  const [cardNumber, setCardNumber] = useState("4532 •••• •••• 8821");
+  const [cardExpiry, setCardExpiry] = useState("08/29");
+  const [cardCvv, setCardCvv] = useState("•••");
+  const [upiTimer, setUpiTimer] = useState(285);
 
   // Passengers state
   const [passengers, setPassengers] = useState<PassengerInput[]>([
@@ -58,6 +95,20 @@ export const BookingPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [simulationScenario, setSimulationScenario] = useState<"SUCCESS" | "PAYMENT_FAILED" | "GATEWAY_TIMEOUT">("SUCCESS");
   const [generalError, setGeneralError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchStops = async () => {
+      try {
+        const sch = await api.getTrainSchedule(trainNumber);
+        if (sch && sch.stops) {
+          setAvailableStops(sch.stops);
+        }
+      } catch (err) {
+        // Fallback
+      }
+    };
+    fetchStops();
+  }, [trainNumber]);
 
   // Fetch live fare quote
   const fetchFareQuote = async (pCount: number) => {
@@ -253,6 +304,65 @@ export const BookingPage: React.FC = () => {
                   </button>
                 </div>
 
+                {/* IRCTC User ID Verification & Boarding Station */}
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                  <div>
+                    <label className="block text-xs font-bold text-navy-primary mb-1">
+                      IRCTC User ID *
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={irctcUserId}
+                        onChange={(e) => setIrctcUserId(e.target.value)}
+                        placeholder="Enter IRCTC Username"
+                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-navy-primary focus:ring-1 focus:ring-action-orange"
+                      />
+                      {isIrctcVerified ? (
+                        <span className="shrink-0 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1.5 rounded-xl border border-emerald-300">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Verified</span>
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setVerifyingUser(true);
+                            setTimeout(() => {
+                              setVerifyingUser(false);
+                              setIsIrctcVerified(true);
+                            }, 300);
+                          }}
+                          className="shrink-0 px-3 py-1.5 rounded-xl bg-action-orange text-white text-xs font-bold"
+                        >
+                          {verifyingUser ? "Checking..." : "Verify ID"}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-navy-primary mb-1">
+                      Boarding Station (Change if required)
+                    </label>
+                    <select
+                      value={boardingStation}
+                      onChange={(e) => setBoardingStation(e.target.value)}
+                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-bold text-navy-primary focus:ring-1 focus:ring-action-orange"
+                    >
+                      {availableStops.length > 0 ? (
+                        availableStops.map((stop) => (
+                          <option key={stop.station_code} value={stop.station_code}>
+                            {stop.station_name} ({stop.station_code}) - {stop.arrival_time === "First" ? "Origin" : `Arr ${stop.arrival_time}`}
+                          </option>
+                        ))
+                      ) : (
+                        <option value={origin}>{origin} (Origin Station)</option>
+                      )}
+                    </select>
+                  </div>
+                </div>
+
                 {/* Passengers List */}
                 <div className="space-y-6">
                   {passengers.map((p, idx) => (
@@ -412,6 +522,120 @@ export const BookingPage: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Other IRCTC Travel Preferences */}
+                <div className="pt-6 border-t border-border-subtle space-y-4">
+                  <h3 className="text-base font-extrabold text-navy-primary flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-action-orange" />
+                    <span>Other IRCTC Travel Preferences</span>
+                  </h3>
+
+                  {/* Auto Upgradation */}
+                  <label className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={autoUpgradation}
+                      onChange={(e) => setAutoUpgradation(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded text-action-orange focus:ring-action-orange"
+                    />
+                    <div>
+                      <span className="text-xs font-bold text-navy-primary block">
+                        Consider for Auto Upgradation
+                      </span>
+                      <span className="text-[11px] text-text-secondary">
+                        Free automatic upgrade to a higher travel class (e.g. 3A to 2A) if vacant berths exist at chart preparation.
+                      </span>
+                    </div>
+                  </label>
+
+                  {/* Booking Condition */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                    <span className="text-xs font-bold text-navy-primary block">
+                      Reservation Choice (PRS Allotment Condition)
+                    </span>
+                    <select
+                      value={bookingCondition}
+                      onChange={(e) => setBookingCondition(e.target.value)}
+                      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-navy-primary"
+                    >
+                      <option value="NONE">None (Book ticket with normal allotment)</option>
+                      <option value="SAME_COACH">Book only if all berths are allotted in the same coach</option>
+                      <option value="ONE_LOWER">Book only if at least 1 lower berth is allotted</option>
+                      <option value="TWO_LOWER">Book only if at least 2 lower berths are allotted</option>
+                    </select>
+                  </div>
+
+                  {/* Travel Insurance */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-navy-primary flex items-center gap-1.5">
+                        <Shield className="w-3.5 h-3.5 text-emerald-600" />
+                        Travel Insurance (₹0.45 per person, incl. GST)
+                      </span>
+                      <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                        Recommended
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-6 pt-1 text-xs font-medium text-text-secondary">
+                      <label className="flex items-center gap-2 cursor-pointer hover:text-navy-primary">
+                        <input
+                          type="radio"
+                          name="insurance"
+                          checked={travelInsurance}
+                          onChange={() => setTravelInsurance(true)}
+                          className="text-action-orange focus:ring-action-orange"
+                        />
+                        <span>Yes, and I accept the terms & conditions</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer hover:text-navy-primary">
+                        <input
+                          type="radio"
+                          name="insurance"
+                          checked={!travelInsurance}
+                          onChange={() => setTravelInsurance(false)}
+                          className="text-action-orange focus:ring-action-orange"
+                        />
+                        <span>No, I do not want travel insurance</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* GST Details (Optional) */}
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setGstEnabled(!gstEnabled)}
+                      className="text-xs font-bold text-action-orange hover:underline flex items-center gap-1"
+                    >
+                      <span>{gstEnabled ? "— Hide GST Details" : "+ Add GST Details for Tax Exemption (Optional)"}</span>
+                    </button>
+
+                    {gstEnabled && (
+                      <div className="mt-3 p-4 rounded-2xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div>
+                          <label className="block font-bold text-text-secondary mb-1">GSTIN Number</label>
+                          <input
+                            type="text"
+                            value={gstin}
+                            onChange={(e) => setGstin(e.target.value.toUpperCase())}
+                            placeholder="e.g. 07AAAAA0000A1Z5"
+                            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl font-mono text-xs font-bold"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-bold text-text-secondary mb-1">Registered Company Name</label>
+                          <input
+                            type="text"
+                            value={companyName}
+                            onChange={(e) => setCompanyName(e.target.value)}
+                            placeholder="e.g. Acme Technologies Pvt Ltd"
+                            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-bold"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 {/* Submit Action */}
                 <div className="pt-4 flex justify-end">
                   <button
@@ -513,6 +737,176 @@ export const BookingPage: React.FC = () => {
                   <p className="leading-relaxed">
                     You are in <b>Local Demo Mode</b>. No credit card or net banking details are requested. You can select a test outcome below to simulate successful ticket allocation, bank decline, or gateway timeout reconciliation.
                   </p>
+                </div>
+
+                {/* Authentic Indian Payment Methods Selector */}
+                <div className="space-y-4">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-text-secondary">
+                    Select Payment Method:
+                  </label>
+
+                  {/* Payment Tabs */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMode("UPI")}
+                      className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-1.5 ${
+                        paymentMode === "UPI"
+                          ? "border-action-orange bg-orange-50 text-action-orange font-bold ring-2 ring-action-orange/20 shadow-sm"
+                          : "border-border-main bg-white hover:bg-slate-50 text-text-secondary"
+                      }`}
+                    >
+                      <QrCode className="w-5 h-5 text-action-orange" />
+                      <span className="text-xs">BHIM UPI / QR</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMode("NET_BANKING")}
+                      className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-1.5 ${
+                        paymentMode === "NET_BANKING"
+                          ? "border-action-orange bg-orange-50 text-action-orange font-bold ring-2 ring-action-orange/20 shadow-sm"
+                          : "border-border-main bg-white hover:bg-slate-50 text-text-secondary"
+                      }`}
+                    >
+                      <Building2 className="w-5 h-5 text-navy-primary" />
+                      <span className="text-xs">Net Banking</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMode("CARD")}
+                      className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-1.5 ${
+                        paymentMode === "CARD"
+                          ? "border-action-orange bg-orange-50 text-action-orange font-bold ring-2 ring-action-orange/20 shadow-sm"
+                          : "border-border-main bg-white hover:bg-slate-50 text-text-secondary"
+                      }`}
+                    >
+                      <CreditCard className="w-5 h-5 text-emerald-600" />
+                      <span className="text-xs">Credit / Debit Card</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setPaymentMode("WALLET")}
+                      className={`p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-1.5 ${
+                        paymentMode === "WALLET"
+                          ? "border-action-orange bg-orange-50 text-action-orange font-bold ring-2 ring-action-orange/20 shadow-sm"
+                          : "border-border-main bg-white hover:bg-slate-50 text-text-secondary"
+                      }`}
+                    >
+                      <Wallet className="w-5 h-5 text-purple-600" />
+                      <span className="text-xs">IRCTC / Wallets</span>
+                    </button>
+                  </div>
+
+                  {/* Tab Details */}
+                  {paymentMode === "UPI" && (
+                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+                      <div className="text-center sm:text-left space-y-2">
+                        <span className="text-xs font-bold text-navy-primary block">
+                          Scan QR with Any UPI App
+                        </span>
+                        <p className="text-[11px] text-text-secondary">
+                          Google Pay, PhonePe, Paytm, BHIM, CRED or Any Banking App.
+                        </p>
+                        <div className="inline-flex items-center gap-1.5 text-xs font-bold text-action-orange bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
+                          <Clock className="w-3.5 h-3.5 animate-pulse" />
+                          <span>QR Expires in 04:45</span>
+                        </div>
+                      </div>
+
+                      {/* Simulated QR Code Canvas */}
+                      <div className="flex flex-col items-center justify-center">
+                        <div className="p-3 bg-white border border-slate-300 rounded-2xl shadow-sm">
+                          <div className="w-32 h-32 bg-slate-900 rounded-xl flex items-center justify-center text-white text-[10px] p-2 text-center relative overflow-hidden">
+                            <div className="absolute inset-2 border-2 border-white/40 flex items-center justify-center">
+                              <span className="font-mono text-[9px] text-center tracking-tighter">
+                                RAILVOYA•UPI•DEMO<br/>₹{quote?.fare_breakdown.total_amount || 0}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-[10px] text-slate-400 mt-1 font-mono">Scan & Pay Demo Simulator</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {paymentMode === "NET_BANKING" && (
+                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                      <span className="text-xs font-bold text-navy-primary block">Select Your Bank:</span>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        {["State Bank of India (SBI)", "HDFC Bank", "ICICI Bank", "Axis Bank", "Punjab National Bank", "Kotak Mahindra Bank"].map((bank) => (
+                          <button
+                            key={bank}
+                            type="button"
+                            onClick={() => setSelectedBank(bank)}
+                            className={`p-2.5 rounded-xl border text-left text-xs font-semibold transition-all ${
+                              selectedBank === bank
+                                ? "border-action-orange bg-white text-action-orange ring-1 ring-action-orange"
+                                : "border-slate-200 bg-white text-text-secondary hover:border-slate-300"
+                            }`}
+                          >
+                            {bank}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {paymentMode === "CARD" && (
+                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                      <div className="flex items-center justify-between pb-1">
+                        <span className="text-xs font-bold text-navy-primary">Card Information:</span>
+                        <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400">
+                          <span className="text-blue-700">VISA</span> • <span className="text-red-600">Mastercard</span> • <span className="text-emerald-700">RuPay</span>
+                        </div>
+                      </div>
+                      <div className="space-y-2 text-xs">
+                        <input
+                          type="text"
+                          value={cardNumber}
+                          onChange={(e) => setCardNumber(e.target.value)}
+                          placeholder="Card Number"
+                          className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl font-mono"
+                        />
+                        <div className="grid grid-cols-2 gap-2">
+                          <input
+                            type="text"
+                            value={cardExpiry}
+                            onChange={(e) => setCardExpiry(e.target.value)}
+                            placeholder="MM/YY"
+                            className="px-3 py-2 bg-white border border-slate-300 rounded-xl font-mono"
+                          />
+                          <input
+                            type="password"
+                            value={cardCvv}
+                            onChange={(e) => setCardCvv(e.target.value)}
+                            placeholder="CVV"
+                            maxLength={4}
+                            className="px-3 py-2 bg-white border border-slate-300 rounded-xl font-mono"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {paymentMode === "WALLET" && (
+                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                      <span className="text-xs font-bold text-navy-primary block">Select Wallet:</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {["Paytm Wallet", "Amazon Pay", "Mobikwik", "Airtel Money"].map((wallet) => (
+                          <button
+                            key={wallet}
+                            type="button"
+                            className="p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-left text-xs font-bold text-navy-primary"
+                          >
+                            {wallet}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Simulation Scenario Radio Group */}

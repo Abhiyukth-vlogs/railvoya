@@ -26,6 +26,10 @@ export const SearchCard: React.FC = () => {
   const [toError, setToError] = useState("");
   const [dateError, setDateError] = useState("");
   const [swapAnim, setSwapAnim] = useState(false);
+  const [flexibleWithDate, setFlexibleWithDate] = useState(false);
+  const [trainWithAvailableBerth, setTrainWithAvailableBerth] = useState(false);
+  const [divyangjanConcession, setDivyangjanConcession] = useState(false);
+  const [railwayPassConcession, setRailwayPassConcession] = useState(false);
 
   const handleSwap = () => {
     setSwapAnim(true);
@@ -81,8 +85,10 @@ export const SearchCard: React.FC = () => {
       origin: fromStation.code,
       destination: toStation.code,
       date: journeyDate,
-      quota,
+      quota: divyangjanConcession ? "HP" : quota,
       travelClass,
+      availableOnly: trainWithAvailableBerth ? "true" : "false",
+      flexible: flexibleWithDate ? "true" : "false",
     });
     navigate(`/search?${params.toString()}`);
   };
@@ -241,6 +247,46 @@ export const SearchCard: React.FC = () => {
               <span>Search trains</span>
             </button>
           </div>
+        </div>
+
+        {/* IRCTC-Style Concessions & Quick Filters */}
+        <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-semibold text-text-secondary">
+          <label className="flex items-center gap-2 cursor-pointer hover:text-navy-primary transition-colors">
+            <input
+              type="checkbox"
+              checked={flexibleWithDate}
+              onChange={(e) => setFlexibleWithDate(e.target.checked)}
+              className="w-4 h-4 rounded text-action-orange focus:ring-action-orange border-slate-300"
+            />
+            <span>Flexible With Date</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer hover:text-navy-primary transition-colors">
+            <input
+              type="checkbox"
+              checked={trainWithAvailableBerth}
+              onChange={(e) => setTrainWithAvailableBerth(e.target.checked)}
+              className="w-4 h-4 rounded text-action-orange focus:ring-action-orange border-slate-300"
+            />
+            <span>Train with Available Berth</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer hover:text-navy-primary transition-colors">
+            <input
+              type="checkbox"
+              checked={divyangjanConcession}
+              onChange={(e) => setDivyangjanConcession(e.target.checked)}
+              className="w-4 h-4 rounded text-action-orange focus:ring-action-orange border-slate-300"
+            />
+            <span>Person With Disability Concession</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer hover:text-navy-primary transition-colors">
+            <input
+              type="checkbox"
+              checked={railwayPassConcession}
+              onChange={(e) => setRailwayPassConcession(e.target.checked)}
+              className="w-4 h-4 rounded text-action-orange focus:ring-action-orange border-slate-300"
+            />
+            <span>Railway Pass Concession</span>
+          </label>
         </div>
       </form>
     </div>

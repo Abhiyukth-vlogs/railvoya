@@ -16,6 +16,7 @@ export interface ClassAvailability {
   seats_count: number;
   last_updated: string;
   catering_available?: boolean;
+  confirmation_probability?: number;
 }
 
 export interface TrainSearchResult {
@@ -32,6 +33,8 @@ export interface TrainSearchResult {
   arrival_day_offset: number;
   running_days: string[];
   classes: ClassAvailability[];
+  on_time_rating?: string;
+  pantry_available?: boolean;
 }
 
 export interface ScheduleStop {
@@ -90,6 +93,17 @@ export interface PassengerInput {
   food_preference?: string;
   senior_citizen?: boolean;
   save_to_account?: boolean;
+}
+
+export interface IRCTCOptions {
+  irctc_user_id?: string;
+  auto_upgradation?: boolean;
+  booking_condition?: string;
+  travel_insurance?: boolean;
+  boarding_station_code?: string;
+  gstin?: string;
+  company_name?: string;
+  company_address?: string;
 }
 
 export interface BookingPassenger {

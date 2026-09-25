@@ -12,6 +12,11 @@ import {
   Calendar,
   Utensils,
   ChevronRight,
+  RefreshCw,
+  Sparkles,
+  Coffee,
+  Info,
+  ThumbsUp,
 } from "lucide-react";
 
 interface TrainCardProps {
@@ -26,6 +31,19 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
     train.classes.length > 0 ? train.classes[0] : null
   );
   const [showSchedule, setShowSchedule] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshText, setRefreshText] = useState("Updated just now");
+  const [showFareBreakdown, setShowFareBreakdown] = useState(false);
+
+  const handleRefresh = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setRefreshing(true);
+    setRefreshText("Refreshing...");
+    setTimeout(() => {
+      setRefreshing(false);
+      setRefreshText("Refreshed just now");
+    }, 600);
+  };
 
   const handleBookNow = () => {
     if (!selectedClass) return;
@@ -64,6 +82,22 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-50 text-action-orange border border-orange-200/60">
                   {train.train_type}
                 </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px] text-text-secondary">
+                <span className="inline-flex items-center gap-1 font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
+                  <ThumbsUp className="w-2.5 h-2.5" /> 96% On-Time
+                </span>
+                <span className="inline-flex items-center gap-1 text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
+                  <Utensils className="w-2.5 h-2.5 text-action-orange" /> Pantry & E-Catering
+                </span>
+                <button
+                  type="button"
+                  onClick={handleRefresh}
+                  className="inline-flex items-center gap-1 text-slate-500 hover:text-action-orange transition-colors"
+                >
+                  <RefreshCw className={`w-2.5 h-2.5 ${refreshing ? "animate-spin text-action-orange" : ""}`} />
+                  <span>{refreshText}</span>
+                </button>
               </div>
             </div>
           </div>
@@ -191,6 +225,13 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
                     <span className="truncate">{cls.status_detail}</span>
                   </div>
 
+                  {(isRac || isWl) && (
+                    <div className="mt-1 text-[10px] font-semibold text-emerald-700 flex items-center gap-1">
+                      <Sparkles className="w-2.5 h-2.5 text-emerald-600" />
+                      <span>{isRac ? "92% Chance" : "78% Chance"}</span>
+                    </div>
+                  )}
+
                   <div className="flex items-center justify-between mt-1 text-[10px] text-text-secondary">
                     <span>{cls.class_name.split("(")[0]}</span>
                     {cls.catering_available && (
@@ -204,11 +245,20 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
             })}
           </div>
 
-          {/* Book Action Button */}
+          {/* Book Action Button & Fare Breakup */}
           <div className="shrink-0 flex items-center gap-3">
             {selectedClass && (
               <div className="hidden sm:flex flex-col text-right">
-                <span className="text-xs text-text-secondary font-medium">Class: <b>{selectedClass.class_code}</b></span>
+                <div className="flex items-center justify-end gap-1.5">
+                  <span className="text-xs text-text-secondary font-medium">Class: <b>{selectedClass.class_code}</b></span>
+                  <button
+                    type="button"
+                    onClick={() => setShowFareBreakdown(!showFareBreakdown)}
+                    className="text-[11px] text-action-orange hover:underline font-bold"
+                  >
+                    Fare Breakup
+                  </button>
+                </div>
                 <span className="text-lg font-extrabold text-navy-primary">₹{selectedClass.fare.toLocaleString("en-IN")}</span>
               </div>
             )}
@@ -223,6 +273,44 @@ export const TrainCard: React.FC<TrainCardProps> = ({ train, journeyDate, quota 
             </button>
           </div>
         </div>
+
+        {/* Fare Breakdown Drawer / Dropdown */}
+        {showFareBreakdown && selectedClass && (
+          <div className="mt-4 p-4 rounded-2xl bg-slate-50 border border-border-subtle text-xs text-text-main animate-fadeIn">
+            <div className="flex items-center justify-between font-bold text-navy-primary pb-2 border-b border-slate-200">
+              <span>Itemized Fare Breakup ({selectedClass.class_code} - {train.train_name})</span>
+              <button
+                type="button"
+                onClick={() => setShowFareBreakdown(false)}
+                className="text-slate-400 hover:text-slate-600 font-bold"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3">
+              <div>
+                <span className="text-text-secondary block">Base Fare:</span>
+                <span className="font-bold text-navy-primary">₹{(selectedClass.fare * 0.82).toFixed(2)}</span>
+              </div>
+              <div>
+                <span className="text-text-secondary block">Reservation Charge:</span>
+                <span className="font-bold text-navy-primary">₹40.00</span>
+              </div>
+              <div>
+                <span className="text-text-secondary block">Superfast Surcharge:</span>
+                <span className="font-bold text-navy-primary">₹45.00</span>
+              </div>
+              <div>
+                <span className="text-text-secondary block">Goods & Services Tax (5%):</span>
+                <span className="font-bold text-navy-primary">₹{(selectedClass.fare * 0.05).toFixed(2)}</span>
+              </div>
+            </div>
+            <div className="mt-3 pt-2 border-t border-slate-200 flex justify-between font-extrabold text-navy-primary text-sm">
+              <span>Total Payable per Adult:</span>
+              <span className="text-action-orange">₹{selectedClass.fare.toLocaleString("en-IN")}</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Schedule Modal */}
